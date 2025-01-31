@@ -1,53 +1,82 @@
-
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
-float u_cal(float u, int n)
+
+int factorial(int n)
 {
-	float temp = u;
-	for (int i = 1; i < n; i++)
-		temp = temp * (u - i);
-	return temp;
-}
-int fact(int n)
-{
-	int f = 1;
-	for (int i = 2; i <= n; i++)
-		f *= i;
-	return f;
+    if(n==0 || n==1)
+    {
+        return 1;
+    }
+    return n * factorial(n-1);
 }
 
-int main()
+double interpolation(vector<vector<double>> &a,double p,int n)
 {
-	int n = 4;
-	float x[] = { 45, 50, 55, 60 };
-	float y[n][n];
-	y[0][0] = 0.7071;
-	y[1][0] = 0.7660;
-	y[2][0] = 0.8192;
-	y[3][0] = 0.8660;
-	for (int i = 1; i < n; i++) {
-		for (int j = 0; j < n - i; j++)
-			y[j][i] = y[j + 1][i - 1] - y[j][i - 1];
-	}
-	for (int i = 0; i < n; i++) {
-		cout << setw(4) << x[i]
-			<< "\t";
-		for (int j = 0; j < n - i; j++)
-			cout << setw(4) << y[i][j]
-				<< "\t";
-		cout << endl;
-	}
+   double result = a[0][0];
+   double term = 1.0;
+   double term2 = 0.0;
+
+   for(int i = 1; i < n; i++)
+   {
+    term*=(p-(i-1));
+    term2 = term / factorial(i);
+    result+= term2*a[i][0]; 
+   }
+
+   return result;
+}
+
+int main ()
+{
+    cout << "Enter The Number of Elemnts - ";
+    int n;
+    cin >> n;
+    cout << endl;
+
+    cout << "Enter The First Number of X - ";
+    double x;
+    cin >> x;
+    cout << endl;
+
+    cout << "Enter The Finding Number of X - ";
+    double x1;
+    cin >> x1;
+    cout << endl;
+
+    cout << "Enter The Difference - ";
+    double diff;
+    cin >> diff;
+    cout << endl;
 
 
-	float value = 52;
-	float sum = y[0][0];
-	float u = (value - x[0]) / (x[1] - x[0]);
-	for (int i = 1; i < n; i++) {
-		sum = sum + (u_cal(u, i) * y[0][i]) /
-								fact(i);
-	}
 
-	cout << "\n Value at " << value << " is "
-		<< sum << endl;
-	return 0;
+    
+
+    vector<vector<double>> a(n,vector<double>(n));
+
+    for(int i  = 0; i < 1; i++)
+    {
+        for(int j = 0; j <n; j++)
+        {
+            cin >> a[i][j];
+        }
+    }
+    int k= n-1;
+
+
+    for(int i = 1; i < n; i++)
+    {
+        cout << "Del " << i << " " << endl;
+        for(int j = 0; j < k; j++)
+        {
+            a[i][j] = a[i-1][j+1] - a[i-1][j];
+            cout<< fixed << setprecision(6) << a[i][j] << endl;
+        }
+        k = k - 1;
+    }
+
+    double p = (x1 - x) / diff;
+
+    cout << interpolation(a,p,n) << endl;
+
 }
